@@ -28,7 +28,7 @@ int main(int argc, const char **argv)
 {
     // Arguments {name first_letter | default_value | description }
     const String keys = "{path p         |../data/dog.jpg   | path to file          }"
-                        "{sigma s        |3                 | Standard Deviation    }";
+                        "{sigma s        |7                 | Standard Deviation    }";
     
     CommandLineParser parser(argc, argv, keys);
     String path = parser.get<std::string>("path");
