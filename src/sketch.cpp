@@ -27,13 +27,13 @@ void saveImage(String name, Mat image)
 int main(int argc, const char **argv)
 {
     // Arguments {name first_letter | default_value | description }
-    const String keys = "{path p         |../data/dog.jpg   | path to file          }"
-                        "{sigma s        |7                 | Standard Deviation    }";
+    const String keys = "{path p         |../data/dog.jpg   | path to file              }"
+                        "{ksize k        |21                | Gaussian Blur Kernel Size }";
     
     CommandLineParser parser(argc, argv, keys);
     String path = parser.get<std::string>("path");
-    int sigma = parser.get<int>("sigma");
-    Mat image_gray, image_gray_inverted, output;
+    int ksize = parser.get<int>("ksize");
+    Mat image_gray, image_gray_blur, output;
 
     // Reads input image
     Mat image = imread(path, cv::IMREAD_UNCHANGED);
@@ -43,14 +43,11 @@ int main(int argc, const char **argv)
 
     cvtColor(image,image_gray,COLOR_BGR2GRAY);
 
-    // Inverts the image
-    image_gray_inverted = 255 - image_gray;
-
     // Blurs the image with gaussian blur
-    GaussianBlur(image_gray_inverted,image_gray_inverted,Size(),sigma,sigma);
+    GaussianBlur(image_gray,image_gray_blur,Size(ksize,ksize),0,0);
 
     // Applies the dodge
-    divide(image_gray, 255 - image_gray_inverted,output,256,-1);
+    divide(image_gray, image_gray_blur,output,256,-1);
 
     // Show image
     showImage("sketch", output);
